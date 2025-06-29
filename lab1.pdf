@@ -1,1 +1,146 @@
-hi
+
+
+txt
+myapp/
+├── pom.xml
+└── src/
+    ├── main/
+    │   ├── java/
+    │   │   └── com/myproject/myapp/MyApp.java
+    │   └── resources/
+    │       └── config.properties
+    └── test/
+        └── java/
+            └── com/myproject/myapp/MyAppTest.java
+```
+
+---
+
+### 1️ **MyApp.java**
+
+ `src/main/java/com/myproject/myapp/MyApp.java`
+
+```java
+package com.myproject.myapp;
+import java.util.ResourceBundle;
+
+public class MyApp {
+    public int userlogin(String inuser, String inpwd) {
+        ResourceBundle rb = ResourceBundle.getBundle("config");
+        String username = rb.getString("username");
+        String password = rb.getString("password");
+
+        if (inuser.equals(username) && inpwd.equals(password))
+            return 1;
+        else
+            return 0;
+    }
+}
+```
+
+---
+
+### 2️ **MyAppTest.java**
+
+ `src/test/java/com/myproject/myapp/MyAppTest.java`
+
+```java
+package com.myproject.myapp;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+public class MyAppTest {
+    @Test
+    public void testlogin1() {
+        MyApp myapp = new MyApp();
+        Assert.assertEquals(0, myapp.userlogin("abc", "abc1234"));
+    }
+
+    @Test
+    public void testlogin2() {
+        MyApp myapp = new MyApp();
+        Assert.assertEquals(1, myapp.userlogin("abc", "abc@1234"));
+    }
+}
+```
+
+---
+
+### 3️ **config.properties**
+
+ `src/main/resources/config.properties`
+
+```
+username=abc
+password=abc@1234
+```
+
+---
+
+### 4️ **pom.xml**
+
+ `pom.xml`
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.myproject</groupId>
+  <artifactId>myapp</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>7.5.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
+```
+
+---
+
+
+mvn test
+
+
+
+
+PART B: Migrate the Project to Gradle**
+
+
+
+build.gradle
+
+plugins {
+    id 'java'
+}
+
+group = 'com.myproject'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.testng:testng:7.5.1'
+}
+
+test {
+    useTestNG()
+}
+
+
+```bash
+gradle test
+gradle build
+
